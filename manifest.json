@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "MyInterface",
+  "version": "1.0.0",
+  "description": "Take back your experience!",
+  "icons": {
+    "16": "img/icon16.png",
+    "48": "img/icon48.png",
+    "128": "img/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["popup.html", "styles.css", "content.js", "img/closeicon.png", "img/reseticon.png"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_icon": {
+      "16": "img/icon16.png",
+      "19": "img/icon19.png",
+      "48": "img/icon48.png",
+      "128": "img/icon128.png"
+    },
+    "default_title": "MyInterface",
+    "default_popup": ""
+  },
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "permissions": [
+    "activeTab", "scripting", "storage", "webNavigation"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["styles.css"]
+    }
+  ]
+}
+

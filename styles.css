@@ -1,0 +1,207 @@
+:root {
+    --background: #0A0094;
+    --text: #44F497;
+    --stroke: #44F497;
+
+    /* --background: #DEE0E2;
+    --text: #0A0094;
+    --stroke: #0A0094; */
+  }
+
+/* this causes issues */
+/* {
+    all: unset; 
+    box-sizing: border-box;
+} */
+
+
+#popup-container {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 300px;
+    background: var(--background);
+    padding: 16px 16px 5px 16px;
+    margin:0;
+    z-index: 9999;
+
+    color: #ffffff;
+        letter-spacing: -0.5px;
+    line-height: 120%;
+
+    /* Stroke effect */
+    outline: 3px solid var(--stroke);
+    filter: drop-shadow(2px 2px 0px var(--stroke)) 
+            drop-shadow(-2px -2px 0px var(--stroke))
+            drop-shadow(-2px 2px 0px var(--stroke))
+            drop-shadow(2px -2px 0px var(--stroke));
+
+    transition: height 0.3s ease;  /* Smooth transition for resizing */
+}
+
+/* does this need to be own class???? */
+.popup-shadow{
+box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.15);
+} 
+
+/* not sure if I like *your* or your underline better? */
+.emphasis{
+    font-style:italic;
+    /* text-decoration: underline; */
+}
+
+
+.popup-header-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; 
+    margin-bottom: 32px;
+    /* border: 1px solid orange; */
+}
+
+.popup-header-text-box{
+    display: flex;
+    flex-direction:column;
+    justify-content: space-between;
+    /* border: 1px solid green; */
+}
+
+.popup-title-text{
+    font-family: monospace;
+    color: var(--text);
+    font-weight:800;
+    font-style:bold;
+    font-size: 16px;
+    padding:0;
+    margin:0;
+}
+
+.popup-body-text{
+    font-family: monospace;
+    color: var(--text);
+    font-weight:300;
+    font-size: 16px;
+    padding:0;
+    margin:0;
+}
+
+.popup-input-text{
+    font-family: monospace;
+    color: var(--text);
+    font-weight:300;
+    font-size: 16px;
+    padding:0;
+    margin:0;
+}
+
+#close-popup {
+    /* font-family: monospace; */
+    color: var(--text);
+    background: none;
+    border: none;
+    margin:0;
+    padding:0;
+    /* font-size: 16px; */
+    cursor: pointer;
+    /* border: 1px red solid; */
+}
+
+.close-icon {
+    width: 16px; 
+    height: 16px; 
+    padding:5px;
+    /* border: 1px orange solid; */
+    /* object-fit: contain; 
+    background: transparent;  
+    border: none;   */
+}
+
+#reset-popup {
+    /* font-family: monospace; */
+    color: var(--text);
+    background: none;
+    border: none;
+    margin:0;
+    padding:0;
+    /* font-size: 16px; */
+    cursor: pointer;
+    /* border: 1px red solid; */
+}
+.reset-icon {
+    width: 16px; 
+    height: 16px; 
+    padding:5px;
+}
+
+.popup-footer{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-top:48px;
+}
+
+.popup-footer-text{
+    font-family: monospace;
+    color: var(--text);
+    font-weight:300;
+    font-size: 8px;
+    padding:0;
+    margin:0;
+}
+
+
+.user-input {
+    /* display:block; */
+    width:100%;
+    font-family: monospace;
+    font-size: 12px;
+    color: var(--text);
+    background-color: transparent;
+    border:none;
+    margin:0;
+    padding:0;
+    resize: none;      
+    overflow: hidden;  
+    word-wrap: break-word;
+    white-space: pre-wrap; 
+/* 
+    caret-color: transparent;
+    position:relative; */
+}
+
+/* custom caret ONLY IF I HAVE TIME!!!restraint */
+/* #user-input::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10px; 
+    height: 16px; 
+    background-color: var(--text); 
+    animation: blink 1s infinite step-end; 
+} */
+
+/* .custom-caret {
+    position: absolute;
+    width: 1em;
+    height: 1.2em;
+    background-color: var(--text);  
+    animation: blink 1s infinite step-end;  
+}
+
+@keyframes blink {
+    50% {
+        background-color: transparent;
+    }
+} */
+
+.user-input::placeholder{
+    color: var(--text);
+    opacity:50%;
+}
+
+.user-input:active, .user-input:focus{
+    background-color: transparent;
+    border:none;
+    outline: none;
+}

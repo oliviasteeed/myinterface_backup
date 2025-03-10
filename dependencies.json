@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "name": "myinterface_v2",
+  "dependencies": {
+    "dotenv": {
+      "version": "10.0.0",
+      "resolved": "https://registry.npmjs.org/dotenv/-/dotenv-10.0.0.tgz",
+      "overridden": false
+    },
+    "langchain": {
+      "version": "0.3.19",
+      "resolved": "https://registry.npmjs.org/langchain/-/langchain-0.3.19.tgz",
+      "overridden": false
+    }
+  }
+}
