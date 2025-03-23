@@ -18,9 +18,9 @@ Because the extension is a prototype, it's not as easy as just downloading it fr
 
 3. The extension requires CORS, Express, and Node to be installed, so ensure you have those dependecies installed and if not please install them in the console of your text editor (ie. `npm install node, npm install cors, npm install express`).
 
-4. Because MyInterface uses the OpenAI API, it requires an API key which I put in an environment variable file. I pasted my API key in the submission comments in Canvas (since you can't push it to Github). You will need to create a new file in the MyInterface directory called '.env' whose only content is 'OPENAI_API_KEY=(paste my API key here).' This is used by the server.js file to make an HTTP request to the API.
+4. Because MyInterface uses the OpenAI API, it requires an API key which I put in an environment variable file. I pasted my API key in the submission comments in Canvas (since you can't push it to Github). You will need to create a new file in the MyInterface directory called '.env' whose only content is `OPENAI_API_KEY=(paste my API key here)`. This is used by the server.js file to make an HTTP request to the API.
 
-5. Before you run the extension, reset the server by running 'node server.js' in the console of your text editor. It should return a confirmation of a new run and the port it's running on, as in the screenshot below. If the extension stops responding and you are seeing errors on the Chrome Extensions page, type Ctrl+C in the console, and restart the server by running 'node server.js'.
+5. Before you run the extension, reset the server by running `node server.js` in the console of your text editor. It should return a confirmation of a new run and the port it's running on, as in the screenshot below. If the extension stops responding and you are seeing errors on the Chrome Extensions page, type Ctrl+C in the console, and restart the server by running `node server.js`.
 ![New server run](readme_images/image-1.png)
 
 ### Extension usage
