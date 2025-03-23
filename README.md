@@ -16,7 +16,7 @@ Because the extension is a prototype, it's not as easy as just downloading it fr
 2. You will also need to open the MyInterface directory in a text editor so you can run the node server. I acknowledge that this is not ideal, but the current iteration is a prototype that I plan to continue working on so it can run in a browser independently. To have the icons display properly, you can change the image path to the ID of your local extension upload. This can be found on the Chrome Extensions page, and copied into the popup.html document, as seen below. 
 ![Updating icon image path](readme_images/image-3.png)
 
-3. The extension requires CORS, Express, and Node to be installed, so ensure you have those dependecies installed and if not please install them in the console of your text editor (ie. npm install node, npm install cors, npm install express).
+3. The extension requires CORS, Express, and Node to be installed, so ensure you have those dependecies installed and if not please install them in the console of your text editor (ie. `npm install node, npm install cors, npm install express`).
 
 4. Because MyInterface uses the OpenAI API, it requires an API key which I put in an environment variable file. I pasted my API key in the submission comments in Canvas (since you can't push it to Github). You will need to create a new file in the MyInterface directory called '.env' whose only content is 'OPENAI_API_KEY=(paste my API key here).' This is used by the server.js file to make an HTTP request to the API.
 
