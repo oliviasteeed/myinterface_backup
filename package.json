@@ -8,10 +8,12 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
-    "langchain": "^0.3.19"
+    "express": "^4.21.2",
+    "langchain": "^0.3.19",
+    "node": "^20.19.0"
   },
-  "devDependencies": {},
   "keywords": [],
   "author": "",
   "license": "ISC"

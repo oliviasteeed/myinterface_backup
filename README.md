@@ -26,6 +26,8 @@ Because the extension is a prototype, it's not as easy as just downloading it fr
 ### Extension usage
 6. After starting the server, refresh the extension on the Chrome extensions page. You can then start using the extension. It generally works better on lower-fidelity websites (ie. a WordPress recipe blog is going to work better than Facebook). The more dynamic elements and complexity a website has, the less change one line of CSS or HTML can accomplish, so keep this in mind when trying it out.
 
+The changes you make will persist across pages and reloads (over time) of a specific website. To reset your changes, hit the reset icon. To can close the window, use the close icon, or toggle the window open and closed with the MyInterface icon in the extensions section of your Chrome toolbar. You can drag the window around the page so as to not block areas of interest.
+
 7. (bonus) To see the response from the OpenAI API that is being inserted into the page, you can open the Service Worker window from the Chrome extensions page so you can see the logging from the server.js file. You can also view the content.js logs in the Chrome console using Inspect.  
 - background.js console
 ![background.js console](readme_images/image-4.png)
