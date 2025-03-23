@@ -17,7 +17,6 @@ async function getCounter() {
 async function setFocusEnd(userInput) {
     const length = userInput.textContent.length;
     userInput.focus();
-    // console.log("span length", length);
 
     // Create a range and set the selection to the end
     const range = document.createRange();
@@ -30,22 +29,19 @@ async function setFocusEnd(userInput) {
     // Clear any existing selections and apply the new range
     selection.removeAllRanges();
     selection.addRange(range);
-
-    // console.log("Setting focus on the end of the span");
 }
 
 // Listener for when the user hits enter
 async function handleEnterKeyPress(shadowRoot) {
     // Get the current counter (await because it's asynchronous)
     const currentCount = await getCounter();
-    // console.log("handle enter key count: ",currentCount);
 
     // Find the user input element with the dynamically generated ID
     const userInput = shadowRoot.getElementById(`input-${currentCount}`);
 
     //set focus to end (it works!!!! :D)
     userInput.textContent = userInput.textContent.trim();
-    setFocusEnd(userInput);  
+    setFocusEnd(userInput);
 
     if (userInput) {
 
@@ -62,9 +58,9 @@ async function handleEnterKeyPress(shadowRoot) {
                     // console.log("new count:", newCount);
 
                     // Log the prompt to be sent (e.g., to an LLM)
-                    console.log("Prompt to be sent to LLM: ", userPrompt);
+                    console.log("content.js: prompt to be sent to LLM: ", userPrompt);
 
-                    if(userPrompt != "I want to change..."){    //only call LLM if user has added to prompt
+                    if (userPrompt != "I want to change...") {    //only call LLM if user has added to prompt
 
                         callGPT(userPrompt);    //WHERE LLM IS ACTUALLY CALLED, send prompt with it
                     }
@@ -75,18 +71,18 @@ async function handleEnterKeyPress(shadowRoot) {
 
                     // Set the focus to the newly created span
                     const newInput = shadowRoot.getElementById(`input-${newCount}`);
-                    setFocusEnd(newInput);  
+                    setFocusEnd(newInput);
 
                     handleEnterKeyPress(shadowRoot);  // re-apply the event listener to the new span
                 }
-                else{
-                    //print out something to screen to say to write a prompt?
-                    console.log("Please write something in the input box.");
+                else {
+                    //print out something to say to write a prompt
+                    console.log("content.js: please write something in the input box.");
                 }
             }
         });
     } else {    //no user input entered - put message to write something here
-        console.error(`Element with id 'input-${currentCount}' not found.`);
+        console.error(`content.js: element with id 'input-${currentCount}' not found.`);
     }
 }
 
@@ -163,7 +159,7 @@ function makePopup() {
             shadowRoot.getElementById("close-popup").addEventListener("click", () => {
                 chrome.storage.local.set({ popupState: "closed" });
                 shadowHost.remove();
-                console.log("popup is false");
+                console.log("content.js: popup closed");
             });
 
             // Add reset button - clearing savedchanges in Chrome storage
@@ -181,29 +177,29 @@ function makePopup() {
 
             handleEnterKeyPress(shadowRoot); // Event listener to make new span when enter key is pressed
 
-        })  
-        .catch(error => console.error("Error injecting popup:", error)); // Handle errors
-}  
+        })
+        .catch(error => console.error("content.js: error injecting popup:", error)); // Handle errors
+}
 
 
-
+////////////////////////////////////////////////////////////////////////////////////
 // WHAT IS ACTUALLY RUN //
 
 // THE ONLY THING THAT IS ACTUALLY CALLED //
 restorePopupIfNeeded(); // makes popup if it was open on previous page
 
-////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
 
 async function restorePopupIfNeeded() {
     const data = await chrome.storage.local.get("popupState");
     if (data.popupState === "open" && !document.getElementById("popup-container")) { //if popup should be open and is not open now, open it, also apply saved changes
         makePopup();
-        getSavedChanges(); 
-        console.log("making popup");
+        getSavedChanges();
+        console.log("content.js: making popup");
     }
-    else{   //if popup should not be open, apply saved changes without opening it
+    else {   //if popup should not be open, apply saved changes without opening it
         getSavedChanges();  //something is going wrong with saved changes across pages and css/html injection - look into this
-        console.log("applying saved changes because popup doesn't need to be opened");
+        console.log("content.js: applying saved changes because popup doesn't need to be opened");
     }
 }
 
@@ -219,7 +215,7 @@ function resetChanges() {
         }
 
         chrome.storage.local.set({ savedChanges }, () => {
-            console.log(`Modifications for ${currentDomain} have been cleared!`);
+            console.log(`content.js: modifications for ${currentDomain} have been cleared!`);
             location.reload(); // Reload the page to remove changes
         });
     });
@@ -233,12 +229,12 @@ function callGPT(userMessage) {
     // console.log("call GPT function in content.js user message:", userMessage);
 
     chrome.runtime.sendMessage({ action: "modifyPage", message: userMessage });
-    console.log("call to ai goes here");
+    console.log("content.js: call to ai goes here");
 }
 
 
-  //save changes to chrome storage they persist across pages (called in background.js)
-  function saveMyChanges(codeType, code) {
+//save changes to chrome storage they persist across pages (called in background.js)
+function saveMyChanges(codeType, code) {
     const currentDomain = window.location.hostname; // Get the domain (e.g., "example.com")
 
     chrome.storage.local.get(["savedChanges"], (data) => {
@@ -260,7 +256,7 @@ function callGPT(userMessage) {
 
         // Save back to storage
         chrome.storage.local.set({ savedChanges }, () => {
-            console.log(`Modifications saved for ${currentDomain}!`);
+            console.log(`content.js: modifications saved for ${currentDomain}!`);
         });
     });
 }
@@ -279,58 +275,22 @@ function getSavedChanges() {
         if (domainChanges) {
             if (domainChanges.myHtml) {
                 injectHtmlToPage(domainChanges.myHtml);
-                console.log("injected html");
+                console.log("content.js: injected html");
             }
             if (domainChanges.myCss) {
                 injectCssToPage(domainChanges.myCss);
-                console.log("injected css");
+                console.log("content.js: injected css");
             }
         } else {
-            console.log(`No saved modifications for ${currentDomain}.`);
+            console.log(`content.js: no saved modifications for ${currentDomain}.`);
         }
     });
 }
 
-
-
-
-  //CLEAN AND INJECT RESPONSE
-
-//   function extractHtmlAndCss(response) {
-//     let cleanedResponse = response
-//         .replace(/```css:/g, '')   // Remove ```css:
-//         .replace(/```html:/g, '')  // Remove ```html:
-//         .replace(/```/g, '')       // Remove all triple backticks
-//         .trim();
-
-//     let extractedCss = "";
-//     let extractedHtml = "";
-
-//     // Extract CSS
-//     const cssMatch = cleanedResponse.match(/(\.|\#)[^{]+\{[^}]+\}/gs);
-//     console.log("cssMatch",cssMatch);
-//     if (cssMatch) {
-//         extractedCss = cssMatch.join("\n"); // Combine multiple CSS rules if present
-//         cleanedResponse = cleanedResponse.replace(cssMatch.join("\n"), "").trim(); 
-//         saveMyChanges("myCss", extractedCss);
-//         console.log("extractedCss", extractedCss);
-//     }
-
-//     // Whatever remains is HTML
-//     extractedHtml = cleanedResponse.trim();
-//     if (extractedHtml != ""){
-//         saveMyChanges("myHtml", extractedHtml);
-//         console.log("extractedHtml", extractedHtml);
-//     }
-    
-
-//     return { html: extractedHtml, css: extractedCss };
-// }
-
 // Function to inject CSS into the page
 function injectCssToPage(css) {
-    console.log("in inject css");
-    if (css != ""){
+    console.log("content.js: in inject css");
+    if (css != "") {
         const styleTag = document.createElement('style');
         styleTag.textContent = css;
         styleTag.setAttribute("data-injected", "true"); // Mark for removal if reset button is pressed
@@ -340,151 +300,11 @@ function injectCssToPage(css) {
 
 // Function to inject HTML into the page
 function injectHtmlToPage(html) {
-    console.log("in inject html");
-    if (html != ""){
-        console.log("html not null");
-    const tempContainer = document.createElement("div"); // Create a temporary container
-    tempContainer.innerHTML = html; // Set the innerHTML to the generated content
-    document.body.appendChild(tempContainer); // Append to the bottom of the page
+    console.log("content.js: in inject html");
+    if (html != "") {
+        const tempContainer = document.createElement("div"); // Create a temporary container
+        tempContainer.innerHTML = html; // Set the innerHTML to the generated content
+        document.body.appendChild(tempContainer); // Append to the bottom of the page
     }
 }
 
-
-// // Function to process the response based on content type (HTML or CSS)
-// function processResponse(response) {
-//     const { html, css } = extractHtmlAndCss(response);
-//     injectHtmlToPage(html);
-//     injectCssToPage(css);
-// }
-
-
-
-
-
-
-
-
-// // Function to clean the response
-// function extractHtmlAndCss(response) {
-//     let cleanedResponse = response
-//         .replace(/```css:/g, '')   // Remove ```css:
-//         .replace(/```html:/g, '')  // Remove ```html:
-//         .replace(/```/g, '')       // Remove all triple backticks
-//         .trim();
-
-//     let extractedCss = "";
-//     let extractedHtml = "";
-
-//     // Extract CSS
-//     const cssMatch = cleanedResponse.match(/(\.|\#)[^{]+\{[^}]+\}/gs);
-//     console.log("cssMatch",cssMatch);
-//     if (cssMatch) {
-//         extractedCss = cssMatch.join("\n"); // Combine multiple CSS rules if present
-//         cleanedResponse = cleanedResponse.replace(cssMatch.join("\n"), "").trim(); // Remove CSS from response
-//         console.log("extractedCss", extractedCss);
-//     }
-
-//     // Whatever remains is HTML
-//     extractedHtml = cleanedResponse.trim();
-//     console.log("extractedHtml", extractedHtml);
-
-//     return { html: extractedHtml, css: extractedCss };
-// }
-
-//   // Function to inject CSS into the page
-//   function injectCssToPage(css) {
-//     const styleTag = document.createElement('style');
-//     styleTag.textContent = css;
-//     styleTag.setAttribute("data-injected", "true"); // Mark for removal if reset button is pressed
-//     document.head.appendChild(styleTag);
-//   }
-  
-//   // Function to inject HTML into the page
-//   function injectHtmlToPage(html) {
-//     if (html != ""){    //only inject if there is html to inject
-//     document.body.innerHTML = html;
-//   }
-//   }
-  
-// //   // Function to check if the response is HTML
-// //   function isHtml(response) {
-// //     return response.trim().startsWith('<html>') || response.trim().startsWith('<!DOCTYPE html>');
-// //   }
-  
-//   // Function to process the response based on content type (HTML or CSS)
-//   function processResponse(response) {
-//     const {html, css} = extractHtmlAndCss(response);
-//       injectHtmlToPage(html);         
-//       injectCssToPage(css);
-//  }
-  
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            // function updateCursorPosition() {
-            //     const placeholder = shadowRoot.getElementById("user-input");
-            
-            //     // Check if the custom caret div exists; if not, create it
-            //     let cursor = placeholder.querySelector(".custom-caret");
-            //     if (!cursor) {
-            //         cursor = document.createElement("div");
-            //         cursor.classList.add("custom-caret");
-            //         placeholder.appendChild(cursor);
-            //         console.log("custom caret baybee");
-            //     }
-            
-            //     // Create a range and selection
-            //     const selection = window.getSelection();
-            //     const range = selection.getRangeAt(0);  // Get the current selection range
-                
-            //     // Get the caret position relative to the viewport
-            //     const rect = range.getBoundingClientRect();
-            //     console.log(rect);
-            
-            //     // Set the custom caret position at the end of the current selection (where the default caret would be)
-            //     cursor.style.top = `${rect.top}px`;  // Vertical position
-            //     cursor.style.left = `${rect.left}px`;  // Horizontal position
-
-            //     console.log("custom caret set");
-            //     console.log(rect.top, rect.left);
-            // }
-
-            // // Update the cursor position whenever the user types or focuses
-            // placeholder.addEventListener("input", updateCursorPosition);
-            // placeholder.addEventListener("focus", updateCursorPosition);

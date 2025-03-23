@@ -25,7 +25,7 @@ chrome.action.onClicked.addListener(async (tab) => {
 chrome.webNavigation.onCompleted.addListener(async (details) => {
 
     if (details.frameId === 0) {
-        console.log("new page, running content.js from bg.js");
+        console.log("background.js: new page, running content.js from bg.js");
         chrome.scripting.executeScript({
             target: { tabId: details.tabId },
             files: ["content.js"]
@@ -71,7 +71,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
                 // Ensure valid results
                 if (!injectionResults || !injectionResults[0] || !injectionResults[0].result) {
-                    console.error("Failed to retrieve HTML and CSS");
+                    console.error("background.js: failed to retrieve HTML and CSS");
                     return;
                 }
 
@@ -79,13 +79,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 const { html, css } = injectionResults[0].result;
 
                 const userMessage = message.message; // User's instruction
-                console.log("usermessage in bg.js (before llm call)", userMessage);
+                console.log("background.js: usermessage (before llm call)", userMessage);
 
                 try {
                     // Send extracted HTML & CSS to the backend with memory support - langchain llm stuff happening here
                     const response = await sendRequestToBackend(userMessage, html, css);
 
-                    console.log("gpt response received in bg.js is: !!!!!!", response);
+                    console.log("background.js: gpt response received in bg.js is: !!!!!!", response);
 
                     // Apply modifications in the content script
                     //   chrome.runtime.sendMessage({ action: "executeChanges", message: response });
@@ -94,7 +94,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     chrome.scripting.executeScript({
                         target: { tabId: tabs[0].id },  // Make sure you're targeting the correct tab
                         func: (response) => {
-                            console.log("modifying script in background.js");
+                            console.log("background.js: modifying script");
 
                             // get html and css code from llm response
                             function extractHtmlAndCss(response) {
@@ -110,7 +110,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
                             // Function to inject CSS into the page
                             function injectCssToPage(css) {
-                                console.log("in inject css", css);
+                                console.log("background.js: in inject css: ", css);
                                 if (css != "") {
                                     saveMyChanges("myCss", css);
                                     const styleTag = document.createElement('style');
@@ -118,18 +118,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                                     styleTag.setAttribute("data-injected", "true"); // Mark for removal if reset button is pressed
                                     document.head.appendChild(styleTag);
 
-                                    const element = document.getElementById("scrolling-text");
-                                    if (element) {
-                                        element.innerText = "Fish"; // Modify the text content
-                                    }
+                                    // const element = document.getElementById("scrolling-text");
+                                    // if (element) {
+                                    //     element.innerText = "Fish"; // Modify the text content
+                                    // }
                                 }
                             }
 
                             // Function to inject HTML into the page
                             function injectHtmlToPage(html) {
+                                console.log("background.js: in inject html: ", html);
                                 if (html != "") {
                                     saveMyChanges("mtHtml", html);
-                                    console.log("html not null");
                                     const tempContainer = document.createElement("div"); // Create a temporary container
                                     tempContainer.innerHTML = html; // Set the innerHTML to the generated content
                                     document.body.appendChild(tempContainer); // Append to the bottom of the page
@@ -137,10 +137,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
                                 }
                             }
-
-                            // this works but only when directly injected into the console
-                            // document.getElementById("scrolling-text").innerText = "Fish";
-
 
 
                             // Function to process the response based on content type (HTML or CSS)
@@ -158,7 +154,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
                     //   sendResponse({ result: "Page modified" });
                 } catch (error) {
-                    console.error("Error in sendRequestToBackend:", error);
+                    console.error("background.js: error in sendRequestToBackend:", error);
                     //   sendResponse({ result: "Error modifying page" });
                 }
             });
@@ -167,28 +163,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         return true; // Indicates async response
     }
 });
-
-
-// chrome.webNavigation.onCompleted.addListener((details) => {
-//     if (changeInfo.status === "complete") { 
-//         chrome.scripting.executeScript({
-//             target: { tabId: details.tabId },
-//             files: ["content.js"] // Reinject the content script
-//         });
-//     }
-// });
-
-
-// chrome.webNavigation.onCompleted.addListener(details => {
-//     if (details.frameId === 0) { // Ensure it's the main frame, not an iframe
-//         chrome.scripting.executeScript({
-//             target: { tabId: details.tabId },
-//             files: ["content.js"] // Ensure content script runs on every page load
-//         });
-//     }
-// });
-
-
 
 
 
@@ -201,7 +175,7 @@ async function sendRequestToBackend(userMessage, html, css) {
     const maxLength = 6000; // max tokens
 
     try {
-        console.log("Sending request to backend with content");
+        console.log("background.js: sending request to backend with content");
 
         const response = await fetch('http://localhost:3000/get-gpt-response', {
             method: 'POST',
@@ -219,14 +193,14 @@ async function sendRequestToBackend(userMessage, html, css) {
             return ""; // Return early in case of error
         }
 
-        console.log("Received response from backend");
+        console.log("background.js: received response from backend");
 
         const data = await response.json();
-        console.log("Parsed JSON response:", data);
+        console.log("background.js: parsed JSON response:", data);
         return data.response;
 
     } catch (error) {
-        console.error("Error in sendRequestToBackend:", error);
+        console.error("background.js: error in sendRequestToBackend:", error);
         return "";
     }
 }
