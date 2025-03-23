@@ -32,7 +32,6 @@ Because the extension is a prototype, it's not as easy as just downloading it fr
 
 - content.js console
 ![content.js console](readme_images/image-5.png)
-content.js console
 
 - Inserted content is identified by the 'data-injected=true' attribute, so can also be viewed in the Elements Inspect view.
 ![Inserted code](readme_images/image-6.png)
