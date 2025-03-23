@@ -16,7 +16,7 @@ Because the extension is a prototype, it's not as easy as just downloading it fr
 2. You will also need to open the MyInterface directory in a text editor so you can run the node server. I acknowledge that this is not ideal, but the current iteration is a prototype that I plan to continue working on so it can run in a browser independently. To have the icons display properly, you can change the image path to the ID of your local extension upload. This can be found on the Chrome Extensions page, and copied into the popup.html document, as seen below. 
 ![Updating icon image path](readme_images/image-3.png)
 
-3. The extension requires CORS, Express, and Node to be installed, so ensure you have those dependecies installed and if not please install them in the console of your text editor.
+3. The extension requires CORS, Express, and Node to be installed, so ensure you have those dependecies installed and if not please install them in the console of your text editor (ie. npm install node, npm install cors, npm install express).
 
 4. Because MyInterface uses the OpenAI API, it requires an API key which I put in an environment variable file. I pasted my API key in the submission comments in Canvas (since you can't push it to Github). You will need to create a new file in the MyInterface directory called '.env' whose only content is 'OPENAI_API_KEY=(paste my API key here).' This is used by the server.js file to make an HTTP request to the API.
 
@@ -27,14 +27,14 @@ Because the extension is a prototype, it's not as easy as just downloading it fr
 6. After starting the server, refresh the extension on the Chrome extensions page. You can then start using the extension. It generally works better on lower-fidelity websites (ie. a WordPress recipe blog is going to work better than Facebook). The more dynamic elements and complexity a website has, the less change one line of CSS or HTML can accomplish, so keep this in mind when trying it out.
 
 7. (bonus) To see the response from the OpenAI API that is being inserted into the page, you can open the Service Worker window from the Chrome extensions page so you can see the logging from the server.js file. You can also view the content.js logs in the Chrome console using Inspect.  
+- background.js console
 ![background.js console](readme_images/image-4.png)
-background.js console
 
-
+- content.js console
 ![content.js console](readme_images/image-5.png)
 content.js console
 
-Inserted content is identified by the 'data-injected=true' attribute, so can also be viewed in the Elements Inspect view.
+- Inserted content is identified by the 'data-injected=true' attribute, so can also be viewed in the Elements Inspect view.
 ![Inserted code](readme_images/image-6.png)
 
 8. (note) Although code is usually inserted, it doesn't always show depending on how the specific website is implemented. Try rephrasing your prompt or adding specificity to increase odds of seeing results. (ie. specify 'text bigger' to 'p copy 2rem' will likely lead to more success).
@@ -72,14 +72,14 @@ Here are some examples of ways you can use the extension. I ordered them from mo
 - You can change the font type and style of text elements. This works better if you identify them by element type or name. You can see how many tries this took to achieve because of the deep nesting of the text elements which have individual stylings applied to them. If something doesn't work rephrase and try again.
 ![Changing the font](readme_images/image-17.png)
 
+- The many nested elements reduced effectiveness in this case.
 ![Nesting](readme_images/image-16.png)
-nested elements reduced effectiveness
 
 5. General tomfoolery
 - Part of the rationale for my project was to allow people to change web interfaces based on their accessibility needs which would include text size or colour, but another motivation was just to allow users to be in control. Designers can be very elitist about who is qualified to or deserves to do design work, but this extension allows users to be in charge, and in some cases to destroy the intent of the designer. Is that a bad thing? Is design sacred? These are questions using the extension can provoke as we explore the level of agency users should have over their personal experience, and how much aesthetic control a designer can maintain. It's like involving users as the randomness factor in a stochastic system.
 
+- Who's to say this isn't a better UI?
 ![Who's to say this isn't better ui?](readme_images/image-19.png)
-Who's to say this isn't better ui?
 
+- Do designers have a responsibility to keep work legible? How many degrees of freedom can you give users before they destroy the functionality of the system?
 ![Do designers have a responsibility to keep work legible?](readme_images/image-110.png)
-Do designers have a responsibility to keep work legible? How many degrees of freedom can you give users before they destroy the functionality of the system?
